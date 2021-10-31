@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LogIn | Registration</title>
+    <link rel="stylesheet" type="text/css" href="form.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="Navigation">
+            <div>
+                <h1 class="navbar-brand">LEARN.INC</h1>
+            </div>
+
+            <div class="navbar-btn">
+                <div>
+                    <h1 class="btn"><a href="/">Go Back?</a></h1>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <img src="form.jpg" class="formImage">
+
+    <!-- ======================================================================================================================================================
+ -->
+
+    <div class="signup-box">
+        <h2>SignUp</h2>
+        <form action="/signup">
+            <div class="user-box">
+                <input type="text" name="email" required="true">
+                <label for="email">Email</label>
+                <div class="email error" style="color: #1eff00; margin-bottom: 10px;"></div>
+            </div>
+
+            <div class="user-box">
+                <input type="password" name="password" required="true">
+                <label for="password">Password</label>
+                <div class="password error" style="color: #1eff00; margin-bottom: 10px;"></div>
+            </div>
+
+            <button>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span> Submit
+            </button>
+        </form>
+    </div>
+
+    <!-- ======================================================================================================================================================
+ -->
+
+    <div>
+        <footer class="footer">
+            <p>Questions? Call 1-866-579-7172</p>
+            <div class="footer-cols">
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Investor Relations</a></li>
+                    <li><a href="#">Corporate Information</a></li>
+                    <li><a href="#">Learn.Inc Originals</a></li>
+                </ul>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Terms Of Use</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+                <ul>
+                    <li><a href="#">Account</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+                <ul>
+                    <li><a href="#">Media Center</a></li>
+                    <li><a href="#">Cookie Preferences</a></li>
+                    <li><a href="#">Legal Notices</a></li>
+                </ul>
+            </div>
+
+        </footer>
+    </div>
+
+    <script>
+        const form = document.querySelector('form');
+        const emailError = document.querySelector('.email.error');
+        const passwordError = document.querySelector('.password.error');
+        form.addEventListener('submit', async(e) => {
+            e.preventDefault();
+            // reset errors
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            // get values
+            const email = form.email.value;
+            const password = form.password.value;
+            try {
+                const res = await fetch('/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email,
+                        password
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                console.log(data);
+                if (data.errors) {
+                    emailError.textContent = data.errors.email;
+                    passwordError.textContent = data.errors.password;
+                }
+                if (data.user) {
+                    location.assign('/');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
